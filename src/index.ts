@@ -15,7 +15,6 @@ export class App {
         this.routes()
     }
 
-    // calcGreatCircle(name1: string, latitude1_degrees: number, longitude1_degrees: number, name2: string, latitude2_degrees: number, longitude2_degrees: number) {
         calcGreatCircle(start:any[]) {
        
     this.gc = new UserLocationDetails();
@@ -108,8 +107,7 @@ export class App {
         let arrayKeysObject: String[] = [];
         let arrayValuesObject: String[] = [];
         let array1 = [];
-        let array3: String[][] = [];
-        // console.log(splitted);
+        let array3: String[][] = []; 
 
         splitted.forEach(firstElement => {
             let obj2 = firstElement.trim().split(',');
@@ -143,8 +141,7 @@ export class App {
             index = i;
             array3.push(array1);
         }
-       // console.log(array3);
-
+ 
         this.app.route("/").get((req: Request, res: Response) => {
            
             
@@ -160,31 +157,24 @@ export class App {
                 }
 
             console.log(this.result)
-            
-// Step 1: Create Connection
+             
 amqp.connect('amqp://localhost', (connError:any, connection:any) => {
     if (connError) {
         throw connError;
-    }
-    // Step 2: Create Channel
+    } 
     connection.createChannel((channelError:any, channel:any) => {
         if (channelError) {
             throw channelError;
-        }
-        // Step 3: Assert Queue
+        } 
         for (let index = 0; index < this.result.length; index++) {
-            // const element = result[index];
-            const QUEUE = this.result[index].name1;
-         //   console.log(result[index]);
-              channel.assertQueue(QUEUE);
-        // Step 4: Send message to queue
+             const QUEUE = this.result[index].name1;  
+              channel.assertQueue(QUEUE); 
         channel.sendToQueue(QUEUE, Buffer.from(`${QUEUE} You have been invited to FINTECH CO Anniversary celebration`));
         console.log(`Message sent to ${QUEUE}`);
         }
       
     })
-})
-            //console.log(thirdArray);
+}) 
             res.send(this.result)
         });
 
@@ -205,23 +195,19 @@ amqp.connect('amqp://localhost', (connError:any, connection:any) => {
 
 
         this.app.route("/user").get((req: Request, res: Response) => {
-
-            // Step 1: Create Connection
+ 
    amqp.connect('amqp://localhost', (connError:any, connection:any) => {
     if (connError) {
         throw connError;
-    }
-    // Step 2: Create Channel
+    } 
     connection.createChannel((channelError:any, channel:any) => {
         if (channelError) {
             throw channelError;
-        }
-        // Step 3: Assert Queue
+        } 
         for (let index = 0; index < this.result.length; index++) {
             const QUEUE = this.result[index].name1;
-            // const QUEUE = 'codingtest'
-        channel.assertQueue(QUEUE);
-        // Step 4: Receive Messages
+         
+        channel.assertQueue(QUEUE); 
         channel.consume(QUEUE, (msg:any) => {
             console.log(`Message received: ${msg.content.toString()}`)
         }, {
